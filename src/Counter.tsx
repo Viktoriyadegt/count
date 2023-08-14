@@ -1,30 +1,39 @@
-import React, {useState} from 'react';
+import React from 'react';
 import s from './App.module.css'
+import Display from "./Display";
+import Button from "./Button";
 
-export const Counter = () => {
-    let [count, setCount] = useState<number>(0)
+export type CounterType = {
+    maxValue: number
+    minValue: number
+    reset: () => void
+    increment: () => void
+    count: number
+}
 
-    const incrementHandler = () => {
-        return setCount(count+1)
-
-    }
-
-    const resetHandler = () => {
-        setCount(0)
-    }
+export const Counter = (props: CounterType) => {
 
     return (
         <div className={s.container1}>
 
-                <div className={count>4?s.counterDisabled :s.counter }>
-                    {count}
-                </div>
+            <div className={props.count >= props.maxValue ? s.counterDisabled : s.counter}>
+               <Display count={props.count}/>
+            </div>
 
 
-<div className={s.container2}>
-    <button className={count>4? s.disabled :s.button } disabled={count>4} onClick={incrementHandler}>inc</button>
-    <button className={count<1? s.disabled : s.button } disabled={count<1} onClick={resetHandler}>reset</button>
-</div>
+            <div className={s.container2}>
+                <Button title={'inc'}
+                        callback={props.increment}
+                        className={props.count >= props.maxValue ? s.disabled : s.button}
+                        disabled={props.count >= props.maxValue}
+                />
+                <Button title={'reset'}
+                        callback={props.reset}
+                        className={props.count === props.minValue ? s.disabled : s.button}
+                        disabled={props.count === props.minValue}
+                />
+
+            </div>
 
         </div>
     );
